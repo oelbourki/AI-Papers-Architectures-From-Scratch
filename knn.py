@@ -8,7 +8,7 @@ class KNN:
     def __init__(self, k=3) -> None:
         self.k = k
     
-    def fit(self, X, y):
+    def fit(self, X, y, type='classification'):
         self.X_train = X
         self.y_train = y
     
@@ -20,8 +20,11 @@ class KNN:
         distances = [euclidaean_distance(x, x_train) for x_train in self.X_train]
         k_idx = np.argsort(distances)[:self.k]
         k_neighbors_labels = [self.y_train[i] for i in k_idx]
-        most_common = Counter(k_idx).most_common(1)
-        return most_common[0][0]
+        if type == 'classification':
+            most_common = Counter(k_idx).most_common(1)
+            return most_common[0][0]
+        else:
+            return np.sum(k_neighbors_labels) / len(k_neighbors_labels)
 
 if __name__ == '__main__':
     from matplotlib.colors import ListedColormap
